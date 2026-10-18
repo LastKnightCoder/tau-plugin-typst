@@ -33,7 +33,7 @@ try {
   )
     throw new Error("manifest.description 必须为1至160字简介");
   await writeFile(path.join(staging, "README.md"), readme);
-  for (const name of ["LICENSE", "CHANGELOG.md"]) {
+  for (const name of ["LICENSE", "CHANGELOG.md", "THIRD_PARTY_NOTICES.md"]) {
     try {
       await writeFile(path.join(staging, name), await readFile(name));
     } catch (error) {
@@ -50,7 +50,7 @@ try {
     jsx: "automatic",
     external: shared,
     metafile: true,
-    loader: { ".svg": "dataurl" },
+    loader: { ".svg": "dataurl", ".md": "text" },
     define: {
       __PLUGIN_META__: JSON.stringify({
         id: manifest.id,
@@ -93,6 +93,10 @@ try {
   zip.addLocalFolder(destination, manifest.id);
   const archive = path.resolve("dist", `${manifest.id}-${manifest.version}.zip`);
   zip.writeZip(archive);
+  if ((await readFile(archive)).length > 8 * 1024 * 1024)
+    throw new Error("插件 ZIP 超过中心 8 MiB 上限");
+  if (zip.getEntries().reduce((size, entry) => size + entry.header.size, 0) > 32 * 1024 * 1024)
+    throw new Error("插件展开内容超过 32 MiB 上限");
   console.log(
     `构建完成：${archive}\n运行 pnpm install:local，或将 ZIP 解压至 ~/.editor/plugins，然后在插件管理中刷新列表并启用。`
   );
