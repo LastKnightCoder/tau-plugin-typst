@@ -10,7 +10,14 @@ export interface TypstPreviewProps {
   onCompiled?(html: string, source: string): void;
 }
 
-export function TypstPreview({ compile, content, initialHtml = "", compiledFrom, isDark, onCompiled }: TypstPreviewProps) {
+export function TypstPreview({
+  compile,
+  content,
+  initialHtml = "",
+  compiledFrom,
+  isDark,
+  onCompiled,
+}: TypstPreviewProps) {
   const [html, setHtml] = useState("");
   const [error, setError] = useState<string | null>(null);
   const callback = useRef(onCompiled);
@@ -21,7 +28,10 @@ export function TypstPreview({ compile, content, initialHtml = "", compiledFrom,
   useEffect(() => {
     const controller = new AbortController();
     setError(null);
-    if (!content.trim()) { setHtml(""); return; }
+    if (!content.trim()) {
+      setHtml("");
+      return;
+    }
     if (validCache) setHtml(initialHtml);
     if (!compile || (validCache && compiledFrom === content)) return;
     const timer = setTimeout(() => {
@@ -38,7 +48,10 @@ export function TypstPreview({ compile, content, initialHtml = "", compiledFrom,
         }
       );
     }, 200);
-    return () => { clearTimeout(timer); controller.abort(); };
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [content, compile, validCache, initialHtml, compiledFrom]);
 
   if (!content.trim()) return <p className="text-ink-3 py-3 text-center">暂无 Typst 内容</p>;
@@ -46,14 +59,31 @@ export function TypstPreview({ compile, content, initialHtml = "", compiledFrom,
   return (
     <div data-tau-typst-preview>
       {displayed ? (
-        <div style={{ filter: isDark ? "invert(1) hue-rotate(180deg)" : undefined }} dangerouslySetInnerHTML={{ __html: displayed }} />
+        <div
+          style={{ filter: isDark ? "invert(1) hue-rotate(180deg)" : undefined }}
+          dangerouslySetInnerHTML={{ __html: displayed }}
+        />
       ) : (
         <div>
-          <p className="text-ink-3">{compile ? error ? "暂无可用预览。" : "正在编译…" : "暂无已保存预览，请在桌面端编译后保存。"}</p>
-          {!compile && <pre><code>{content}</code></pre>}
+          <p className="text-ink-3">
+            {compile
+              ? error
+                ? "暂无可用预览。"
+                : "正在编译…"
+              : "暂无已保存预览，请在桌面端编译后保存。"}
+          </p>
+          {!compile && (
+            <pre>
+              <code>{content}</code>
+            </pre>
+          )}
         </div>
       )}
-      {error && <p role="alert" className="text-danger">{error}</p>}
+      {error && (
+        <p role="alert" className="text-danger">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

@@ -7,5 +7,7 @@ export interface TypstElement {
   children: { type: "formatted"; text: string }[];
 }
 declare module "@tau/plugins" {
-  interface EditorElementMap { typst: TypstElement; }
+  interface EditorElementMap {
+    typst: TypstElement;
+  }
 }

@@ -6,4 +6,6 @@ TypstBlock 经 usePluginServices 获取可选宿主服务，适配成函数交�
 
 `type: typst`、`content/html/compiledFrom/compiledAt/children` 延续既有数据，Markdown 只序列化源码。没有 compiledFrom 的历史缓存可以展示，已标记源码且不匹配的缓存不用于博客与静态导出。
 
-运行 `pnpm install --frozen-lockfile`、`pnpm test`、`pnpm build`。产物 `dist/tau.typst-0.1.0.zip` 只包含插件代码，不含原生编译器、WASM 或字体；不要把客户端原生依赖复制进插件。
+运行 `pnpm install --frozen-lockfile`、`pnpm test`、`pnpm build`。产物 `dist/tau.typst-0.1.1.zip` 只包含插件代码，不含原生编译器、WASM 或字体；不要把客户端原生依赖复制进插件。旧博客没有 usePluginServices 导出时按无服务处理，仍可显示缓存或源码。
+
+服务入口缺失的回退只解决组件能力可选问题；BlogKit 仍须不再内置 Typst。插件不覆盖重复节点声明，旧模板应先更新为与迁移客户端配套的版本。
