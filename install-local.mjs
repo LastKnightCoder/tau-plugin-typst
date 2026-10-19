@@ -24,15 +24,7 @@ if (
   packaged.sync !== undefined
 )
   throw new Error("ZIP入口与模板约定不一致");
-const allowed = [
-  "manifest.json",
-  "main.js",
-  "main.css",
-  "README.md",
-  "LICENSE",
-  "CHANGELOG.md",
-  "THIRD_PARTY_NOTICES.md",
-];
+const allowed = ["manifest.json", "main.js", "main.css", "README.md", "LICENSE", "CHANGELOG.md"];
 for (const entry of entries) {
   if (!allowed.some(file => entry.entryName === `${manifest.id}/${file}`))
     throw new Error("ZIP 包含非约定文件");

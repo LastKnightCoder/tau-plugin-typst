@@ -33,7 +33,7 @@ try {
   )
     throw new Error("manifest.description 必须为1至160字简介");
   await writeFile(path.join(staging, "README.md"), readme);
-  for (const name of ["LICENSE", "CHANGELOG.md", "THIRD_PARTY_NOTICES.md"]) {
+  for (const name of ["LICENSE", "CHANGELOG.md"]) {
     try {
       await writeFile(path.join(staging, name), await readFile(name));
     } catch (error) {

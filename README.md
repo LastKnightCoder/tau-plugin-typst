@@ -30,3 +30,12 @@
 
 - 需要 Tau 0.59.0 或更高版本。
 - 打开、关闭或升级这个插件后，都要重启 Tau 才会生效，插件页会提示「立即重启」。
+
+## 第三方组件与许可
+
+排版引擎与字体在首次使用时从公共 CDN 下载，不随插件包分发：
+
+- typst.ts（编译器与渲染器 wasm，0.6.1-rc3，基于 Typst）：Apache License 2.0
+- Libertinus Serif：SIL Open Font License 1.1
+- New Computer Modern / New CM Math：SIL Open Font License 1.1
+- DejaVu Sans Mono：Bitstream Vera 许可延续的免费许可
