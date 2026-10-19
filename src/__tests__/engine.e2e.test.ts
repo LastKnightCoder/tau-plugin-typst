@@ -2,6 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { TypstEngine, formatDiagnostics } from "../compiler/engine";
 
+declare const process: { env: Record<string, string | undefined> };
+
 /** 真实下载与编译链路验证：TYPST_E2E=1 pnpm test 时执行，需要网络。 */
 const enabled = !!process.env.TYPST_E2E;
 
