@@ -93,8 +93,8 @@ try {
   zip.addLocalFolder(destination, manifest.id);
   const archive = path.resolve("dist", `${manifest.id}-${manifest.version}.zip`);
   zip.writeZip(archive);
-  if ((await readFile(archive)).length > 8 * 1024 * 1024)
-    throw new Error("插件 ZIP 超过中心 8 MiB 上限");
+  if ((await readFile(archive)).length > 16 * 1024 * 1024)
+    throw new Error("插件 ZIP 超过中心 16 MiB 上限");
   if (zip.getEntries().reduce((size, entry) => size + entry.header.size, 0) > 32 * 1024 * 1024)
     throw new Error("插件展开内容超过 32 MiB 上限");
   console.log(

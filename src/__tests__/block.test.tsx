@@ -8,10 +8,9 @@ const fixture = vi.hoisted(() => ({
   update: (_properties: Record<string, unknown>) => {},
   edit: (_source: string) => {},
   writes: [] as Record<string, unknown>[],
-  compile: vi.fn(async ({ source }: { source: string }) => ({ html: `<p>${source}</p>` })),
+  compile: vi.fn(async (source: string) => `<svg viewBox="0 0 10 10">${source}</svg>`),
 }));
 vi.mock("@tau/plugins", () => ({
-  usePluginServices: () => ({ typst: { compile: fixture.compile } }),
   useSourceBlock: () => ({ theme: { isDark: false }, update: fixture.update }),
   useReportPreviewError: () => false,
   SourceBlockEditor: ({
@@ -24,6 +23,9 @@ vi.mock("@tau/plugins", () => ({
     fixture.edit = onChange;
     return children;
   },
+}));
+vi.mock("../compiler/engine", () => ({
+  getTypstEngine: async () => ({ compile: fixture.compile }),
 }));
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 const host = document.createElement("div");
@@ -65,7 +67,7 @@ it("预览挂载不写文档，用户编辑成功后才保存匹配的缓存", a
   await act(async () => vi.advanceTimersByTime(200));
   expect(fixture.writes[0]).toMatchObject({ content: "B", html: "" });
   expect(fixture.writes[1]).toMatchObject({
-    html: "<p>B</p>",
+    html: "<svg viewBox=\"0 0 10 10\">B</svg>",
     compiledFrom: "B",
     compiledAt: expect.any(Number),
   });

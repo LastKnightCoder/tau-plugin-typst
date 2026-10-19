@@ -1,6 +1,11 @@
 # 第三方许可
 
-插件打包 lucide-react 的 FileType 图标，许可如下。React、Tau SDK/UI 由宿主提供；原生 Typst 编译器和字体由客户端提供，不随本插件分发。
+插件打包 lucide-react 的 FileType 图标，许可如下。React、Tau SDK/UI 由宿主提供；Typst 的 WebAssembly 编译器、渲染器与默认字体在首次使用时从公共 CDN 下载，不随本插件分发，来源与许可如下：
+
+- typst.ts（@myriaddreamin/typst-ts-web-compiler、@myriaddreamin/typst-ts-renderer，0.6.1-rc3）：Apache License 2.0，Copyright (c) typst.ts contributors（基于 Typst，Apache License 2.0）。
+- Libertinus Serif（The Libertinus Project）：SIL Open Font License 1.1。
+- New Computer Modern / New CM Math（Typst 项目分发）：SIL Open Font License 1.1。
+- DejaVu Sans Mono（DejaVu fonts contributors）：其自有免费许可（Bitstream Vera 许可的延续）。
 
 ISC License
 

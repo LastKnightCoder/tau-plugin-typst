@@ -7,6 +7,8 @@ export interface TypstPreviewProps {
   initialHtml?: string;
   compiledFrom?: string;
   isDark?: boolean;
+  /** 编译准备阶段的说明（下载编译组件/初始化），编译完成后清空。 */
+  statusText?: string;
   onCompiled?(html: string, source: string): void;
 }
 
@@ -16,6 +18,7 @@ export function TypstPreview({
   initialHtml = "",
   compiledFrom,
   isDark,
+  statusText,
   onCompiled,
 }: TypstPreviewProps) {
   const [html, setHtml] = useState("");
@@ -60,17 +63,14 @@ export function TypstPreview({
     <div data-tau-typst-preview>
       {displayed ? (
         <div
+          className="overflow-x-auto"
           style={{ filter: isDark ? "invert(1) hue-rotate(180deg)" : undefined }}
           dangerouslySetInnerHTML={{ __html: displayed }}
         />
       ) : (
         <div>
           <p className="text-ink-3">
-            {compile
-              ? error
-                ? "暂无可用预览。"
-                : "正在编译…"
-              : "暂无已保存预览，请在桌面端编译后保存。"}
+            {compile ? (error ? "暂无可用预览。" : statusText ?? "正在编译…") : "暂无已保存预览。"}
           </p>
           {!compile && (
             <pre>
