@@ -3,6 +3,7 @@ import AdmZip from "adm-zip";
 import { mkdir, readFile, writeFile, mkdtemp, rename, rm } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID, createHash } from "node:crypto";
+import { collectSkills } from "./skills.mjs";
 
 const manifest = JSON.parse(await readFile("manifest.json", "utf8"));
 if (!/^[a-z0-9]+(?:[.-][a-z0-9]+)+$/.test(manifest.id))
@@ -68,14 +69,19 @@ try {
   const styles = Object.keys(result.metafile.outputs).some(file => file.endsWith("main.css"));
   if (manifest.sync !== undefined)
     throw new Error("同步提供方应在渲染入口注册，不再支持Node后台入口");
+  const skills = await collectSkills(staging);
   const integrity = {};
+  for (const file of skills.files)
+    integrity[file] = createHash("sha256")
+      .update(await readFile(path.join(staging, file)))
+      .digest("hex");
   for (const file of ["main.js", ...(styles ? ["main.css"] : [])])
     integrity[file] = createHash("sha256")
       .update(await readFile(path.join(staging, file)))
       .digest("hex");
   await writeFile(
     path.join(staging, "manifest.json"),
-    JSON.stringify({ ...manifest, integrity, ...(styles ? { styles: "main.css" } : {}) }, null, 2)
+    JSON.stringify({ ...manifest, ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }, null, 2)
   );
   const destination = path.resolve("dist", `${manifest.version}-${buildId}`);
   await rename(staging, destination);

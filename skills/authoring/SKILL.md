@@ -1,3 +1,8 @@
+---
+name: "Typst 排版"
+description: "创建或修改文档中的 Typst 排版块时使用。"
+---
+
 # Typst 排版
 
 在用户要求使用 Typst 排版、编写公式或修改已有 Typst 块时使用。用 typst 代码围栏保存原始源码；不要把编译后的 HTML 写入围栏，也不要改写无关源码。
