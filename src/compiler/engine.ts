@@ -2,18 +2,15 @@
  * 渲染进程内的 Typst 编译引擎：wasm 编译器 + 渲染器，输出自包含 SVG。
  *
  * 首次编译前需要联网下载编译组件（约 32 MiB，含默认字体集），此后缓存在本机，
- * 离线可用。初始化与每次编译都在当前线程同步执行，小文档耗时在几十毫秒量级，
- * 配合预览组件的防抖使用。
+ * 离线可用。Wasm 异步初始化以适配移动 WebView，排版执行仍配合预览防抖使用。
  */
 
 import { loadEngineResources, type DownloadProgress } from "./resources";
-import {
-  initSync as initCompilerSync,
+import initializeCompiler, {
   TypstCompilerBuilder,
   type TypstDiagnostic,
 } from "../vendor/typst_ts_web_compiler.mjs";
-import {
-  initSync as initRendererSync,
+import initializeRenderer, {
   TypstRenderer,
   type RenderSession,
 } from "../vendor/typst_ts_renderer.mjs";
@@ -53,8 +50,12 @@ export class TypstEngine {
       signal: options.signal,
       onProgress: options.onDownloadProgress,
     });
-    initCompilerSync({ module: new WebAssembly.Module(compilerWasm) });
-    initRendererSync({ module: new WebAssembly.Module(rendererWasm) });
+    options.signal?.throwIfAborted();
+    await Promise.all([
+      initializeCompiler({ module_or_path: compilerWasm }),
+      initializeRenderer({ module_or_path: rendererWasm }),
+    ]);
+    options.signal?.throwIfAborted();
     const builder = new TypstCompilerBuilder();
     await builder.set_dummy_access_model();
     for (const font of fonts) await builder.add_raw_font(font);

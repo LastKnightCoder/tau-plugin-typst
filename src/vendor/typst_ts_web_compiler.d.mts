@@ -29,4 +29,4 @@ export class TypstCompilerBuilder {
   add_raw_font(data: Uint8Array): Promise<void>;
   build(): Promise<TypstCompiler>;
 }
-export function initSync(module: { module: WebAssembly.Module } | BufferSource): void;
+export default function initialize(input: { module_or_path: BufferSource }): Promise<unknown>;

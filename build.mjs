@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile, mkdtemp, rename, rm } from "node:fs/promise
 import path from "node:path";
 import { randomUUID, createHash } from "node:crypto";
 import { collectSkills } from "./skills.mjs";
+import { buildPortablePluginManifest } from "@tau/plugins/portable";
 
 const manifest = JSON.parse(await readFile("manifest.json", "utf8"));
 if (!/^[a-z0-9]+(?:[.-][a-z0-9]+)+$/.test(manifest.id))
@@ -81,7 +82,7 @@ try {
       .digest("hex");
   await writeFile(
     path.join(staging, "manifest.json"),
-    JSON.stringify({ ...manifest, ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }, null, 2)
+    JSON.stringify(buildPortablePluginManifest({ ...manifest, ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }), null, 2)
   );
   const destination = path.resolve("dist", `${manifest.version}-${buildId}`);
   await rename(staging, destination);

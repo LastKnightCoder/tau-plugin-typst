@@ -9,4 +9,4 @@ export class TypstRenderer {
   session_from_artifact(artifact: Uint8Array, decoder: string): RenderSession;
   svg_data(session: RenderSession, parts?: number | null): string;
 }
-export function initSync(module: { module: WebAssembly.Module } | BufferSource): void;
+export default function initialize(input: { module_or_path: BufferSource }): Promise<unknown>;
