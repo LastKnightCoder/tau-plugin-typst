@@ -1,16 +1,15 @@
 # 兼容性与开发验证
 
-当前使用公开 npm SDK 0.36.0、UI 0.4.0；插件版本与最低客户端版本以 manifest.json 为准。保留格式 1、插件 ID、原有数据字段与功能，仅升级公共依赖，不把新 SDK 版本等同于移动平台支持。
+使用 SDK 0.37.0 候选与 UI 0.4.0。SDK 尚未发布，先在仓库外副本注入本地 SDK tarball，再安装、冻结安装、构建和测试；不能把候选包写成已发布 npm 版本。
 
 ## 平台边界
 
-typst 节点与 codec、公共 SourceBlockEditor 可复用；当前编译器为插件自己的 WebAssembly 引擎，不再依赖宿主 Typst 服务。移动仍需验证首次下载约 32 MiB 资源、缓存、编译内存与取消；保留作者 Skill、博客缓存与导出，不能直接转换格式 3。
+同一个作者清单声明 desktop、android、ios，构建生成同一份格式 3 ZIP。插件 ID、节点类型与数据保持不变。Typst 使用插件内 WebAssembly 引擎，异步初始化大体积 Wasm；首次引擎与字体下载、取消和缓存分别验证。
 
-跨端能力以[官方 API 支持矩阵](https://github.com/LastKnightCoder/tau-plugin-template/blob/main/docs/api-support.md)为准。未来适配仍使用同一插件 ID 与更高版本，节点 type 和历史数据保持兼容；不生成另一个 Android 专用插件。
+环境只提供 platform 和 input.coarsePointer/finePointer，不包含布局或能力列表。公共要求由构建器生成，实际额外需求在 requires 声明；用户权限和文档只读状态仍独立判断。
 
-## 验证与发布
+纯 Markdown Skill 由构建器打包，桌面消费、移动只保存。正文和博客使用同一份节点定义，不依赖应用 activate。
 
-1. 在独立仓库执行 `pnpm install --frozen-lockfile`。
-2. 执行 `pnpm test`，再执行 `pnpm build`。
-3. 正式用户通过插件中心安装。作者客户端行为验收覆盖启用、原有功能、保存重开与停用；构建或单测通过不等于已完成这些验收。
-4. 发布时提高 package.json 与 manifest.json 版本，使用新 tag；不覆盖旧版本。推送 tag 会触发发布工作流，提交源码不等于已经上架。
+## 验证与发行
+
+仓库外构建与测试不代表设备验收。Android/iOS 分别验证下载安装、插入、编辑、保存、取消和重启恢复；平板、最低系统、真机输入与手感仍单独验收。只有明确授权发行时才发布 npm 或推送发布标签；普通源码提交不等于插件已上架。

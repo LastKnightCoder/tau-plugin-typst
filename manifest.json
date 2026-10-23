@@ -1,5 +1,4 @@
 {
-  "formatVersion": 3,
   "id": "tau.typst",
   "name": "Typst 排版",
   "description": "编辑 Typst 文档块，在本地 WebAssembly 引擎中编译并预览排版结果，保存后可发布到博客。",
@@ -13,42 +12,23 @@
     "公式"
   ],
   "version": "0.2.2",
-  "apiVersion": 1,
-  "platform": "portable",
-  "format": "cjs",
-  "main": "main.js",
-  "editor": true,
-  "profile": "web-v1",
+  "requires": [
+    "sourceEditor"
+  ],
+  "editor": {
+    "elements": {
+      "typst": "edit"
+    }
+  },
   "targets": {
     "desktop": {
-      "minAppVersion": "0.59.2",
-      "required": [
-        "sourceEditor"
-      ],
-      "optional": [],
-      "elements": {
-        "typst": "edit"
-      }
+      "minAppVersion": "0.59.2"
     },
     "android": {
-      "minAppVersion": "0.2.3",
-      "required": [
-        "sourceEditor"
-      ],
-      "optional": [],
-      "elements": {
-        "typst": "edit"
-      }
+      "minAppVersion": "0.2.3"
     },
     "ios": {
-      "minAppVersion": "0.2.3",
-      "required": [
-        "sourceEditor"
-      ],
-      "optional": [],
-      "elements": {
-        "typst": "edit"
-      }
+      "minAppVersion": "0.2.3"
     }
   }
 }

@@ -82,7 +82,7 @@ try {
       .digest("hex");
   await writeFile(
     path.join(staging, "manifest.json"),
-    JSON.stringify(buildPortablePluginManifest({ ...manifest, ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }), null, 2)
+    JSON.stringify(buildPortablePluginManifest(manifest, { main: "main.js", ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }), null, 2)
   );
   const destination = path.resolve("dist", `${manifest.version}-${buildId}`);
   await rename(staging, destination);
