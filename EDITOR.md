@@ -4,7 +4,7 @@
 
 ## 定义一个块
 
-先在 `manifest.json` 中加入 `"editor": true`（完整示例见下文），然后在插件定义里声明 `editorExtensions`：
+在插件定义中直接注册 `editorExtensions`；清单只声明支持平台和最低版本：
 
 ```tsx
 import { useState } from "react";
@@ -79,7 +79,7 @@ export default definePlugin({
   "platform": "desktop",
   "format": "cjs",
   "main": "main.js",
-  "editor": true
+  "targets": { "desktop": { "minAppVersion": "0.59.4" } }
 }
 ```
 
@@ -148,7 +148,7 @@ function SourceView({ element, children }: { element: SourceElement; children: R
 | API                                         | 用途                                                                                                           |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `SourceBlockEditor`                         | `element/mode/title/icon/initValue/onChange` 为必填；`center/extend/fluid` 控制预览布局，`children` 是预览内容 |
-| `useSourceBlock(element)`                   | 返回当前主题 `theme`、可选样式编译器 `compiler` 与节点字段更新函数 `update`；只能在编辑器内调用 |
+| `useSourceBlock(element)`                   | 返回当前主题 `theme`、可选样式编译器 `compiler` 与节点字段更新函数 `update`；只能在编辑器内调用                |
 | `useReportPreviewError(message, {stale})`   | 向源码预览块上报错误，传 null 清除；stale 表示是否保留了上次预览                                               |
 | `insertSourceBlock(editor, element, line?)` | 插入或替换空段落并聚焦源码，返回插入路径；不能插入时返回 undefined                                             |
 | `sourceBlockParagraphBehavior(type)`        | 放入扩展 `behaviorsFor.paragraph`，支持段首退格聚焦前一源码块                                                  |

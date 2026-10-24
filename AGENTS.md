@@ -1,10 +1,10 @@
 # AI 开发指南
 
-- 当前 SDK 0.37.0、UI 0.4.0，平台边界见 [COMPATIBILITY.md](COMPATIBILITY.md)。下文接口最低版本不是当前依赖版本。
+- 当前 SDK 0.41.0、UI 0.4.0，平台边界见 [COMPATIBILITY.md](COMPATIBILITY.md)。下文接口最低版本不是当前依赖版本。
 
 - 先阅读 DEVELOPMENT.md、API.md、manifest.json 和 src/index.tsx，理解现有示例后再修改。
-- 定义文档节点前阅读 EDITOR.md，使用静态 editorExtensions 并在作者清单 editor.elements 声明支持等级；渲染代码须能在浏览器运行，不为移动端或网页另写渲染组件。
-- 本插件使用 SDK 0.37.0、Tau 0.59.0。使用插件内置 WebAssembly 引擎，TypstPreview 只接收编译函数，不依赖宿主 Typst 服务。博客回退缓存或源码；仅用户源码编辑后的匹配结果写入缓存。
+- 定义文档节点前阅读 EDITOR.md，使用静态 editorExtensions ；渲染代码须能在浏览器运行，不为移动端或网页另写渲染组件。
+- 本插件使用 SDK 0.41.0、Tau 0.59.0。使用插件内置 WebAssembly 引擎，TypstPreview 只接收编译函数，不依赖宿主 Typst 服务。博客回退缓存或源码；仅用户源码编辑后的匹配结果写入缓存。
 - 使用 AI 前阅读 AI.md，通过 ai.features 声明功能，由用户分配模型并授权。仅调用 context.ai，不索取用户的 API Key；处理取消、未授权和额度不足，不循环重试。
 - 提供 AI 工具前阅读 MCP.md，通过 context.mcp.register 注册本地 tools 或外部 transport；需要 SDK 0.13.0 和对应客户端。
 - README.md 写给第一次使用插件的用户：能做什么、怎么开始、常见问题；不写开发过程、内部实现或迁移历史。它随 ZIP 打包，manifest.description 填一句话简介，CHANGELOG.md 可选。
