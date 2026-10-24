@@ -4,7 +4,7 @@
   "description": "编辑 Typst 文档块，在本地 WebAssembly 引擎中编译并预览排版结果，保存后可发布到博客。",
   "categories": ["editor", "ai"],
   "keywords": ["Typst", "排版", "公式"],
-  "version": "0.2.3",
+  "version": "0.2.4",
   "targets": {
     "desktop": {
       "minAppVersion": "0.59.4"

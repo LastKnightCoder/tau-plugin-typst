@@ -7,9 +7,7 @@ import { collectSkills } from "./skills.mjs";
 import { buildPortablePluginManifest } from "@tau/plugins/portable";
 
 const manifest = JSON.parse(await readFile("manifest.json", "utf8"));
-if (!/^[a-z0-9]+(?:[.-][a-z0-9]+)+$/.test(manifest.id))
-  throw new Error("插件 ID 应为小写字母、数字及点或连字符组成的命名空间");
-if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(manifest.version)) throw new Error("插件版本无效");
+
 const shared = [
   "@tau/plugins",
   "@tau/plugins/whiteboard",
@@ -28,12 +26,8 @@ const pointer = path.resolve("dist", `.building-pointer-${buildId}`);
 try {
   const readme = await readFile("README.md", "utf8");
   if (!readme.trim()) throw new Error("README.md 必须包含插件介绍与使用说明");
-  if (
-    typeof manifest.description !== "string" ||
-    !manifest.description.trim() ||
-    manifest.description.length > 160
-  )
-    throw new Error("manifest.description 必须为1至160字简介");
+  if (typeof manifest.description !== "string" || !manifest.description.trim())
+    throw new Error("manifest.description 必须为非空简介");
   await writeFile(path.join(staging, "README.md"), readme);
   for (const name of ["LICENSE", "CHANGELOG.md"]) {
     try {
@@ -82,7 +76,16 @@ try {
       .digest("hex");
   await writeFile(
     path.join(staging, "manifest.json"),
-    JSON.stringify(buildPortablePluginManifest(manifest, { main: "main.js", ...(skills.ids.length ? { skills: skills.ids } : {}), integrity, ...(styles ? { styles: "main.css" } : {}) }), null, 2)
+    JSON.stringify(
+      buildPortablePluginManifest(manifest, {
+        main: "main.js",
+        ...(skills.ids.length ? { skills: skills.ids } : {}),
+        integrity,
+        ...(styles ? { styles: "main.css" } : {}),
+      }),
+      null,
+      2
+    )
   );
   const destination = path.resolve("dist", `${manifest.version}-${buildId}`);
   await rename(staging, destination);

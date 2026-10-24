@@ -1,6 +1,6 @@
 # 兼容性与开发验证
 
-使用 SDK 0.41.0与 UI 0.4.0。SDK 已发布到 npm，使用仓库内的正式 npm 依赖与锁文件，执行 pnpm install --frozen-lockfile、构建和测试，无需注入本地 SDK。
+使用 SDK 0.42.0与 UI 0.4.0。SDK 已发布到 npm，使用仓库内的正式 npm 依赖与锁文件，执行 pnpm install --frozen-lockfile、构建和测试，无需注入本地 SDK。
 
 ## 平台边界
 
