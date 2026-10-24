@@ -184,3 +184,7 @@ defineEditorExtension({
 插件启用后 Skill 才可用，停用时自动移除。Skill 页面会标明它来自你的插件，用户可以调整调用方式、停用或复制到自己的 Skill 目录。目前每个 Skill 只有一份正文，不支持脚本和附件。
 
 正文可以写在单独的 SKILL.md 中，构建时用 esbuild 的 `.md: text` loader 作为字符串导入。
+
+## 正文字数
+
+SDK 0.44.0 的 `editorMetrics` 与 `editorCodecs` 并列。统计字段在 `src/metrics.ts` 声明，由宿主统一计算；普通 children 自动遍历，渲染缓存、资源地址与内部标识不计入。源码节点声明源码字段，纯图册声明空字段列表。零字数不表示空文档，不能用它决定删除节点。
