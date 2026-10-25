@@ -1,5 +1,5 @@
 import { FileType } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { SourceBlockEditor, useSourceBlock, type EditorElementRenderProps } from "@tau/plugins";
 import { getTypstEngine } from "../compiler/engine";
 import { TypstPreview } from "./TypstPreview";
@@ -10,8 +10,7 @@ export function TypstBlock({
   element,
   children,
 }: EditorElementRenderProps<TypstElement>) {
-  const { update, theme } = useSourceBlock(element);
-  const editedSource = useRef<string | undefined>(undefined);
+  const { theme } = useSourceBlock(element);
   const [statusText, setStatusText] = useState<string>();
   const compile = useMemo(
     () => async (source: string, signal: AbortSignal) => {
@@ -31,29 +30,20 @@ export function TypstBlock({
   return (
     <div {...attributes}>
       <SourceBlockEditor
-        mode="stex"
+        mode="typst"
         title="Typst"
         icon={FileType}
-        initValue={element.content}
+        field="content"
         element={element}
         center
-        onChange={content => {
-          editedSource.current = content;
-          update({ content, html: "", compiledFrom: undefined, compiledAt: undefined });
-        }}
       >
         <TypstPreview
           compile={compile}
           content={element.content}
-          initialHtml={element.html}
+          initialHtml={element.compiledFrom === element.content ? element.html : undefined}
           compiledFrom={element.compiledFrom}
           isDark={theme.isDark}
           statusText={statusText}
-          onCompiled={(html, compiledFrom) => {
-            if (editedSource.current !== compiledFrom || element.content !== compiledFrom) return;
-            editedSource.current = undefined;
-            update({ html, compiledFrom, compiledAt: Date.now() });
-          }}
         />
       </SourceBlockEditor>
       {children}

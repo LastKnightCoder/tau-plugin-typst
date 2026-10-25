@@ -14,6 +14,8 @@ export const typstExtension = defineEditorExtension({
   elements: [
     defineEditorElement<TypstElement>({
       type: "typst",
+      dataVersion: 1,
+      collaboration: { textFields: ["content"] },
       kind: "block",
       drag: true,
       isVoid: true,

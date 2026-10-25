@@ -1,6 +1,6 @@
 # 兼容性与开发验证
 
-使用已发布的 SDK 0.44.0 与 UI 0.5.0。依赖从 npm 注册表获取，按仓库正式锁文件执行 pnpm install --frozen-lockfile、测试和构建。
+使用已发布的 SDK 0.45.0 与 UI 0.5.0。依赖从 npm 注册表获取，按仓库正式锁文件执行 pnpm install --frozen-lockfile、测试和构建。
 
 ## 平台边界
 
@@ -15,3 +15,5 @@
 仓库外构建与测试不代表设备验收。Android/iOS 分别验证下载安装、插入、编辑、保存、取消和重启恢复；平板、最低系统、真机输入与手感仍单独验收。只有明确授权发行时才发布 npm 或推送发布标签；普通源码提交不等于插件已上架。
 
 字数规则需要包含内容统计协议的桌面 0.59.5、Android/iOS 0.2.7 客户端；源码与普通正文使用同一计数算法。SDK、插件与客户端的发布状态独立，安装兼容性以清单和插件中心为准。
+
+节点采用 dataVersion: 1；源码通过 collaboration.textFields 和宿主字段绑定编辑，不使用 initValue/onChange 整段覆盖。具体写法见已安装 SDK 的 docs/editor-collaboration.md。最低客户端要求见 manifest.json；新插件不会使旧客户端自动获得这些能力。

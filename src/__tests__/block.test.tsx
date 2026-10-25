@@ -15,12 +15,14 @@ vi.mock("@tau/plugins", () => ({
   useReportPreviewError: () => false,
   SourceBlockEditor: ({
     children,
-    onChange,
+    field,
   }: {
     children: ReactNode;
-    onChange(source: string): void;
+    element: TypstElement;
+    field: string;
   }) => {
-    fixture.edit = onChange;
+    expect(field).toBe("content");
+    fixture.edit = source => fixture.update({ content: source });
     return children;
   },
 }));
@@ -58,18 +60,13 @@ function Harness() {
   );
 }
 
-it("预览挂载不写文档，用户编辑成功后才保存匹配的缓存", async () => {
+it("源码经字段绑定更新，编译预览不把缓存写回文档", async () => {
   await act(async () => root.render(<Harness />));
   await act(async () => vi.advanceTimersByTime(200));
   expect(fixture.writes).toHaveLength(0);
   expect(host.textContent).toContain("A");
   await act(async () => fixture.edit("B"));
   await act(async () => vi.advanceTimersByTime(200));
-  expect(fixture.writes[0]).toMatchObject({ content: "B", html: "" });
-  expect(fixture.writes[1]).toMatchObject({
-    html: "<svg viewBox=\"0 0 10 10\">B</svg>",
-    compiledFrom: "B",
-    compiledAt: expect.any(Number),
-  });
+  expect(fixture.writes).toEqual([{ content: "B" }]);
   expect(host.textContent).toContain("B");
 });
