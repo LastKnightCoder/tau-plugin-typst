@@ -64,8 +64,20 @@ it("诊断信息格式化为可读消息", () => {
       { message: "second" },
     ])
   ).toContain("unknown variable: x");
-  expect(formatDiagnostics([{ message: "unknown variable: x", hints: ["did you mean `y`?"] }])).toContain(
-    "提示：did you mean `y`?"
-  );
-  expect(formatDiagnostics("raw error")).toBe("编译失败");
+  expect(
+    formatDiagnostics([{ message: "unknown variable: x", hints: ["did you mean `y`?"] }])
+  ).toContain("提示：did you mean `y`?");
+});
+
+it("结构化诊断按用户源码行号格式化，扣除前置的页面设置行", () => {
+  expect(
+    formatDiagnostics([
+      { path: "/main.typ", range: "3:3-3:6", severity: "error", message: "unknown variable: sun" },
+    ])
+  ).toBe("第 3 行：unknown variable: sun");
+  expect(
+    formatDiagnostics([{ path: "@preview/x/lib.typ", range: "0:0-0:1", message: "包错误" }])
+  ).toBe("包错误");
+  expect(formatDiagnostics("compiler panicked")).toBe("compiler panicked");
+  expect(formatDiagnostics(undefined)).toBe("编译失败");
 });

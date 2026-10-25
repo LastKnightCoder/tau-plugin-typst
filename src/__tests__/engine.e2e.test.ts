@@ -20,6 +20,17 @@ describe.skipIf(!enabled)("Typst 引擎端到端", () => {
     { timeout: 300_000 }
   );
 
+  it(
+    "源码错误给出编译器的原始消息与所在行，不只是「编译失败」",
+    async () => {
+      const engine = await TypstEngine.create();
+      expect(() => engine.compile("= 标题\n\n#sun(1)")).toThrow(
+        "Typst 编译失败：第 3 行：unknown variable: sun"
+      );
+    },
+    { timeout: 300_000 }
+  );
+
   it("诊断错误格式化不抛异常", () => {
     expect(formatDiagnostics([{ message: "unknown variable: x" }])).toContain("unknown variable");
   });

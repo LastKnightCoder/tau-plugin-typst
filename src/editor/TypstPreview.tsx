@@ -26,7 +26,8 @@ export function TypstPreview({
   const callback = useRef(onCompiled);
   callback.current = onCompiled;
   const validCache = !!initialHtml && (!compiledFrom || compiledFrom === content);
-  useReportPreviewError(error, { stale: !!html });
+  // 在源码预览块内由宿主显示错误，自己只在块外（如博客）显示
+  const reported = useReportPreviewError(error, { stale: !!html });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -70,7 +71,11 @@ export function TypstPreview({
       ) : (
         <div>
           <p className="text-ink-3">
-            {compile ? (error ? "暂无可用预览。" : statusText ?? "正在编译…") : "暂无已保存预览。"}
+            {compile
+              ? error
+                ? "暂无可用预览。"
+                : (statusText ?? "正在编译…")
+              : "暂无已保存预览。"}
           </p>
           {!compile && (
             <pre>
@@ -79,7 +84,7 @@ export function TypstPreview({
           )}
         </div>
       )}
-      {error && (
+      {error && !reported && (
         <p role="alert" className="text-danger">
           {error}
         </p>

@@ -4,7 +4,8 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { TypstPreview } from "../editor/TypstPreview";
 import { typstHtml } from "../editor/markdown";
 
-vi.mock("@tau/plugins", () => ({ useReportPreviewError: () => false }));
+const reportMock = vi.hoisted(() => ({ reported: false }));
+vi.mock("@tau/plugins", () => ({ useReportPreviewError: () => reportMock.reported }));
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 let host: HTMLDivElement;
 let root: Root;
@@ -16,6 +17,7 @@ beforeEach(() => {
 afterEach(async () => {
   await act(async () => root.unmount());
   vi.useRealTimers();
+  reportMock.reported = false;
 });
 
 it("博客不编译，匹配和历史缓存可显示，过期缓存回退到源码", async () => {
@@ -100,4 +102,14 @@ it("匹配缓存不重复编译，静态导出拒绝过期缓存并转义源码"
   expect(typstHtml({ content: "<script>", html: "过期", compiledFrom: "旧源码" })).toContain(
     "&lt;script&gt;"
   );
+});
+
+it("错误已交给源码预览块显示时不再自己渲染，避免重复", async () => {
+  reportMock.reported = true;
+  const compile = vi.fn(() => Promise.reject(new Error("语法错误")));
+  await act(async () => root.render(<TypstPreview content="bad" compile={compile} />));
+  await act(async () => vi.advanceTimersByTime(200));
+  expect(compile).toHaveBeenCalledTimes(1);
+  expect(host.querySelector('[role="alert"]')).toBeNull();
+  expect(host.textContent).toContain("暂无可用预览");
 });
