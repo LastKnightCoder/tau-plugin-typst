@@ -2,6 +2,7 @@ import { FileType } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SourceBlockEditor, useSourceBlock, type EditorElementRenderProps } from "@tau/plugins";
 import { getTypstEngine } from "../compiler/engine";
+import { t } from "../i18n";
 import { TypstPreview } from "./TypstPreview";
 import type { TypstElement } from "./types";
 
@@ -12,14 +13,18 @@ export function TypstBlock({
 }: EditorElementRenderProps<TypstElement>) {
   const { theme } = useSourceBlock(element);
   const [statusText, setStatusText] = useState<string>();
+  // 编译是异步动作：状态文案在发生时按当前语言解析，不闭包捕获某次渲染的翻译器
   const compile = useMemo(
     () => async (source: string, signal: AbortSignal) => {
-      setStatusText("正在准备 Typst 编译组件…");
+      setStatusText(t("status.preparing"));
       const engine = await getTypstEngine({
         signal,
         onDownloadProgress: ({ loadedBytes, totalBytes }) =>
           setStatusText(
-            `正在下载编译组件与字体（仅首次，约 ${Math.round(totalBytes / 1024 / 1024)} MiB）：${Math.floor((loadedBytes / totalBytes) * 100)}%`
+            t("status.downloading", {
+              size: Math.round(totalBytes / 1024 / 1024),
+              percent: Math.floor((loadedBytes / totalBytes) * 100),
+            }),
           ),
       });
       setStatusText(undefined);

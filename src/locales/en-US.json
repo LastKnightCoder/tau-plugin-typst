@@ -1,0 +1,10 @@
+{
+  "block.description": "Typst typesetting",
+  "status.preparing": "Preparing the Typst compiler…",
+  "status.downloading": "Downloading the compiler and fonts (first time only, about {{size}} MiB): {{percent}}%",
+  "preview.emptyContent": "No Typst content yet",
+  "preview.noPreview": "No preview available.",
+  "preview.compiling": "Compiling…",
+  "preview.noSaved": "No saved preview.",
+  "error.compileFailed": "Typst compilation failed"
+}

@@ -1,0 +1,10 @@
+{
+  "block.description": "Typst 排版",
+  "status.preparing": "正在准备 Typst 编译组件…",
+  "status.downloading": "正在下载编译组件与字体（仅首次，约 {{size}} MiB）：{{percent}}%",
+  "preview.emptyContent": "暂无 Typst 内容",
+  "preview.noPreview": "暂无可用预览。",
+  "preview.compiling": "正在编译…",
+  "preview.noSaved": "暂无已保存预览。",
+  "error.compileFailed": "Typst 编译失败"
+}

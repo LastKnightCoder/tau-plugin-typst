@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useReportPreviewError } from "@tau/plugins";
+import { useI18n, useReportPreviewError } from "@tau/plugins";
+import { messages, t } from "../i18n";
 
 export interface TypstPreviewProps {
   compile?: (source: string, signal: AbortSignal) => Promise<string>;
@@ -21,6 +22,7 @@ export function TypstPreview({
   statusText,
   onCompiled,
 }: TypstPreviewProps) {
+  const { t: translate } = useI18n(messages);
   const [html, setHtml] = useState("");
   const [error, setError] = useState<string | null>(null);
   const callback = useRef(onCompiled);
@@ -48,7 +50,7 @@ export function TypstPreview({
         },
         cause => {
           if (!controller.signal.aborted)
-            setError(cause instanceof Error ? cause.message : "Typst 编译失败");
+            setError(cause instanceof Error ? cause.message : t("error.compileFailed"));
         }
       );
     }, 200);
@@ -58,7 +60,8 @@ export function TypstPreview({
     };
   }, [content, compile, validCache, initialHtml, compiledFrom]);
 
-  if (!content.trim()) return <p className="text-ink-3 py-3 text-center">暂无 Typst 内容</p>;
+  if (!content.trim())
+    return <p className="text-ink-3 py-3 text-center">{translate("preview.emptyContent")}</p>;
   const displayed = compile ? html : validCache ? initialHtml : "";
   return (
     <div data-tau-typst-preview>
@@ -73,9 +76,9 @@ export function TypstPreview({
           <p className="text-ink-3">
             {compile
               ? error
-                ? "暂无可用预览。"
-                : (statusText ?? "正在编译…")
-              : "暂无已保存预览。"}
+                ? translate("preview.noPreview")
+                : (statusText ?? translate("preview.compiling"))
+              : translate("preview.noSaved")}
           </p>
           {!compile && (
             <pre>

@@ -6,6 +6,7 @@ import {
   sourceBlockParagraphBehavior,
 } from "@tau/plugins";
 import { TypstBlock } from "./TypstBlock";
+import { t } from "../i18n";
 import { typstHtml } from "./markdown";
 import type { TypstElement } from "./types";
 
@@ -23,11 +24,11 @@ export const typstExtension = defineEditorExtension({
       render: props => <TypstBlock {...props} />,
     }),
   ],
-  blockPanel: [
+  blockPanel: (editor) => [
     {
       icon: FileType,
       title: "Typst",
-      description: "Typst 排版",
+      description: t("block.description"),
       keywords: ["typst", "math", "typeset"],
       onClick: editor => {
         insertSourceBlock(editor, {

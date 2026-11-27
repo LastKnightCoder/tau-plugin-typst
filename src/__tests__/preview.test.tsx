@@ -5,7 +5,20 @@ import { TypstPreview } from "../editor/TypstPreview";
 import { typstHtml } from "../editor/markdown";
 
 const reportMock = vi.hoisted(() => ({ reported: false }));
-vi.mock("@tau/plugins", () => ({ useReportPreviewError: () => reportMock.reported }));
+vi.mock("@tau/plugins", async () => {
+  const { default: zhCN } = await import("../locales/zh-CN.json");
+  return {
+    defineI18n: (config: unknown) => config,
+    useReportPreviewError: () => reportMock.reported,
+    useI18n: () => ({
+      t: (key: string, values?: Record<string, unknown>) =>
+        String((zhCN as Record<string, string>)[key] ?? "").replace(
+          /\{\{(\w+)\}\}/g,
+          (_, name) => String(values?.[name] ?? ""),
+        ),
+    }),
+  };
+});
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 let host: HTMLDivElement;
 let root: Root;

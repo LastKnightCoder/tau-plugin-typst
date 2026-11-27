@@ -10,8 +10,19 @@ const fixture = vi.hoisted(() => ({
   writes: [] as Record<string, unknown>[],
   compile: vi.fn(async (source: string) => `<svg viewBox="0 0 10 10">${source}</svg>`),
 }));
-vi.mock("@tau/plugins", () => ({
-  useSourceBlock: () => ({ theme: { isDark: false }, update: fixture.update }),
+vi.mock("@tau/plugins", async () => {
+  const { default: zhCN } = await import("../locales/zh-CN.json");
+  return {
+    defineI18n: (config: unknown) => config,
+    // TypstPreview 渲染固定文案；宿主翻译运行时是边界协作者，按源语言词典解析
+    useI18n: () => ({
+      t: (key: string, values?: Record<string, unknown>) =>
+        String((zhCN as Record<string, string>)[key] ?? "").replace(
+          /\{\{(\w+)\}\}/g,
+          (_, name) => String(values?.[name] ?? ""),
+        ),
+    }),
+    useSourceBlock: () => ({ theme: { isDark: false }, update: fixture.update }),
   useReportPreviewError: () => false,
   SourceBlockEditor: ({
     children,
@@ -25,7 +36,8 @@ vi.mock("@tau/plugins", () => ({
     fixture.edit = source => fixture.update({ content: source });
     return children;
   },
-}));
+  };
+});
 vi.mock("../compiler/engine", () => ({
   getTypstEngine: async () => ({ compile: fixture.compile }),
 }));
