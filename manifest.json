@@ -11,16 +11,41 @@
     "排版",
     "公式"
   ],
-  "version": "0.2.7",
+  "i18n": {
+    "zh-TW": {
+      "description": "編輯 Typst 文件區塊，在本機 WebAssembly 引擎中編譯並預覽排版結果，儲存後可發佈至部落格。",
+      "keywords": [
+        "Typst",
+        "排版",
+        "公式"
+      ]
+    },
+    "en-US": {
+      "name": "Typst Typesetting",
+      "description": "Edit Typst blocks, compile and preview locally with WebAssembly, and publish saved results to your blog.",
+      "keywords": [
+        "Typst",
+        "typesetting",
+        "math",
+        "formula"
+      ]
+    }
+  },
+  "locales": [
+    "zh-CN",
+    "zh-TW",
+    "en-US"
+  ],
+  "version": "0.2.8",
   "targets": {
     "desktop": {
-      "minAppVersion": "0.59.5"
+      "minAppVersion": "0.68.0"
     },
     "android": {
-      "minAppVersion": "0.2.7"
+      "minAppVersion": "0.6.0"
     },
     "ios": {
-      "minAppVersion": "0.2.7"
+      "minAppVersion": "0.6.0"
     }
   }
 }

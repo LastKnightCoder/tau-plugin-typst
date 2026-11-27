@@ -1,6 +1,6 @@
 # 兼容性与开发验证
 
-使用已发布的 SDK 0.45.0 与 UI 0.5.0。依赖从 npm 注册表获取，按仓库正式锁文件执行 pnpm install --frozen-lockfile、测试和构建。
+使用已发布的 SDK 0.63.0 与 UI 0.7.1。依赖从 npm 注册表获取，按仓库正式锁文件执行 pnpm install --frozen-lockfile、测试和构建。
 
 ## 平台边界
 
